@@ -93,7 +93,7 @@ fn main() {
         run_initially: true,
 
         cmd: vec![
-            String::from("git add -A &&"),
+            String::from("git add . &&"),
             String::from("git commit -m \"automatic sync\" &&"),
             String::from("git push"),
         ],
