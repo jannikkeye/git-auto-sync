@@ -1,0 +1,9 @@
+[package]
+name = "notable_git_sync"
+version = "0.1.0"
+authors = ["janisis"]
+edition = "2018"
+
+[dependencies]
+watchexec = "1.10.0"
+clap = "2.31.2"
