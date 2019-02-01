@@ -9,7 +9,7 @@ use watchexec::{
     error::Error,
     run::{watch, Handler, ExecHandler}
 };
-
+use std::env;
 
 struct WatchHandler {
     inner: ExecHandler,
@@ -46,7 +46,7 @@ impl WatchHandler {
 fn main() {
     let matches = App::new("My Super Program")
         .version("1.0")
-        .author("Kevin K. <kbknapp@gmail.com>")
+        .author("Jannik Keye <jannik.keye@gmail.com>")
         .about("Does awesome things")
         .arg(Arg::with_name("path")
             .help("Path to watch")
@@ -73,7 +73,28 @@ fn main() {
         panic!("{:?} is not a directory", path);
     }
 
+    env::set_current_dir(path.to_path_buf()).unwrap();
+
     println!("Watching path: {:#?}", path);
+
+    let script = "
+    untracked_files=`git ls-files --others --exclude-standard  | wc -l`
+    unstaged_files=`git diff --cached --numstat | wc -l`
+
+    timestamp() {
+        date +\"%T\"
+    }
+
+    git add .
+
+    if [ $unstaged_files -eq 0 ]
+    then
+    echo no staged changes detected
+    else
+    git commit -a -m \"$(timestamp) – automatic sync\"
+    fi
+    git push
+    ";
 
     let arglist = Args {
         filters: vec![],
@@ -81,21 +102,17 @@ fn main() {
         once: true,
         signal: None,
         restart: true,
-
         poll: false,
         poll_interval: 50,
-        debounce: 500,
-        ignores: vec![String::from(".git")],
+        debounce: 1500,
+        ignores: vec![String::from("**/.git/**/*")],
         no_vcs_ignore: false,
-
         clear_screen: false,
-        debug: true,
+        debug: false,
         run_initially: true,
 
         cmd: vec![
-            String::from("git add . &&"),
-            String::from("git commit -m \"automatic sync\" &&"),
-            String::from("git push"),
+            script.to_owned(),
         ],
         paths: vec![path.to_path_buf()],
     };
