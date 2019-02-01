@@ -1,5 +1,5 @@
 [package]
-name = "notable_git_sync"
+name = "git_auto_sync"
 version = "0.1.0"
 authors = ["janisis"]
 edition = "2018"

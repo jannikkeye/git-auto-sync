@@ -78,7 +78,6 @@ fn main() {
     println!("Watching path: {:#?}", path);
 
     let script = "
-    untracked_files=`git ls-files --others --exclude-standard  | wc -l`
     unstaged_files=`git diff --cached --numstat | wc -l`
 
     timestamp() {
