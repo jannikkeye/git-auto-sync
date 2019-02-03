@@ -1,6 +1,9 @@
 extern crate watchexec;
 extern crate clap;
 
+use git_auto_sync::{
+    repo
+};
 use std::path;
 use clap::{Arg, App};
 use watchexec::{
@@ -25,7 +28,7 @@ impl Handler for WatchHandler {
     fn on_update(&mut self, ops: &[PathOp]) -> Result<bool, Error> {
         self.start();
 
-        self.inner.on_update(ops);
+        self.inner.on_update(ops)?;
 
         Ok(true)
     }
@@ -50,8 +53,17 @@ fn main() {
         .about("Does awesome things")
         .arg(Arg::with_name("path")
             .help("Path to watch")
-            .index(1)
+            .takes_value(true)
+            .short("p")
+            .long("path")
             .default_value(".")
+            .required(true)
+        )
+        .arg(Arg::with_name("remote")
+            .help("The git remote to sync changes to.")
+            .long("remote")
+            .value_name("remote")
+            .takes_value(true)
             .required(true)
         )
         .arg(Arg::with_name("restart")
@@ -69,16 +81,26 @@ fn main() {
     let path_arg = matches.value_of("path").unwrap();
     let path = path::Path::new(&path_arg).canonicalize().unwrap();
 
+    env::set_current_dir(path.to_path_buf()).unwrap();
+
     if path.is_dir() == false {
         panic!("{:?} is not a directory", path);
     }
 
-    env::set_current_dir(path.to_path_buf()).unwrap();
+    if repo::is_repo(&path) == false {
+        println!("{:#?} is not a git repository", path);
+        println!("Exiting...");
+
+        std::process::exit(1);
+    }
+
 
     println!("Watching path: {:#?}", path);
 
     let script = "
     unstaged_files=`git diff --cached --numstat | wc -l`
+
+    echo $unstaged_files unstaged files
 
     timestamp() {
         date +\"%T\"
@@ -91,8 +113,8 @@ fn main() {
     echo no staged changes detected
     else
     git commit -a -m \"$(timestamp) – automatic sync\"
-    fi
     git push
+    fi
     ";
 
     let arglist = Args {
@@ -109,7 +131,6 @@ fn main() {
         clear_screen: false,
         debug: false,
         run_initially: true,
-
         cmd: vec![
             script.to_owned(),
         ],

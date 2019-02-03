@@ -7,3 +7,8 @@ edition = "2018"
 [dependencies]
 watchexec = "1.10.0"
 clap = "2.31.2"
+quick-error = "1.2.2"
+
+[lib]
+name = "git_auto_sync"
+path = "src/lib.rs"
