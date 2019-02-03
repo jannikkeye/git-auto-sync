@@ -1,8 +1,11 @@
 [package]
 name = "git_auto_sync"
 version = "0.1.0"
-authors = ["janisis"]
+authors = ["jannikkeye"]
 edition = "2018"
+description="A simple script to watch a git repository and push changes to the default remote as they happen."
+license="MIT"
+repository="https://gitlab.com/jannik.keye/git-auto-sync.git"
 
 [dependencies]
 watchexec = "1.10.0"
