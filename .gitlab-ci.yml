@@ -20,7 +20,7 @@ test-rust-nightly:
 
 pre-publish:
     stage: pre-publish
-    image: rustlang/rust:latest
+    image: rust:latest
     script:
         - cargo build --release
     artifacts:
