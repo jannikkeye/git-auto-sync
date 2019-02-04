@@ -7,8 +7,6 @@ osx-build:
   image: rust:latest
   variables:
     TARGET: x86_64-apple-darwin
-  only:
-    - tags
   script:
     - rustup target add $TARGET
     - cargo build --release --target $TARGET
@@ -23,6 +21,6 @@ osx-publish:
     variables:
       TARGET: x86_64-apple-darwin
     only:
-        - tags
+      - master
     script:
         - gitlab-release --message $CI_COMMIT_TAG target/$TARGET/main
