@@ -3,15 +3,15 @@ stages:
   - pre-publish
   - publish
 
-rust-latest:
-  stage: build
+test-rust-latest:
+  stage: test
   image: rust:latest
   script:
     - cargo build --verbose
     - cargo test --verbose
 
-rust-nightly:
-  stage: build
+test-rust-nightly:
+  stage: test
   image: rustlang/rust:nightly
   script:
     - cargo build --verbose
