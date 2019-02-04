@@ -10,6 +10,7 @@ osx-build:
   only:
     - tags
   script:
+    - rustup target add $TARGET
     - cargo build --release --target $TARGET
   artifacts:
     expire_in: 1 hour
