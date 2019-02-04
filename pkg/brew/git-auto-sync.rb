@@ -1,4 +1,4 @@
-class GitAutoSyncBin < Formula
+class GitAutoSync < Formula
     version '0.1.3'
     desc "Automatically push changes to the remote repository."
     homepage "https://github.com/jannikkeye/git-auto-sync"
