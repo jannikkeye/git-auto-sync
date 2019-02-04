@@ -1,6 +1,6 @@
 [package]
 name = "git_auto_sync"
-version = "0.1.1"
+version = "0.1.2"
 authors = ["jannikkeye"]
 edition = "2018"
 description="A simple script to watch a git repository and push changes to the default remote as they happen."
