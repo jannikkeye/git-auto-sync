@@ -9,4 +9,4 @@ class GitAutoSyncBin < Formula
     def install
       bin.install "gas"
     end
-  end
+end
