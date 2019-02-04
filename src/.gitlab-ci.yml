@@ -1,0 +1,35 @@
+stages:
+  - test
+  - pre-publish
+  - publish
+
+rust-latest:
+  stage: build
+  image: rust:latest
+  script:
+    - cargo build --verbose
+    - cargo test --verbose
+
+rust-nightly:
+  stage: build
+  image: rustlang/rust:nightly
+  script:
+    - cargo build --verbose
+    - cargo test --verbose
+  allow_failure: true
+
+pre-publish:
+    stage: build
+    script:
+        - cargo build --release
+    artifacts:
+        expire_in: '1 hour'
+        paths:
+            - target/release/main
+publish:
+    image: inetprocess/gitlab-release
+    stage: publish
+    only:
+        - tags
+    script:
+        - gitlab-release --message 'New release' target/release/main
