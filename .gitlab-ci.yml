@@ -19,7 +19,7 @@ test-rust-nightly:
   allow_failure: true
 
 pre-publish:
-    stage: build
+    stage: pre-publish
     script:
         - cargo build --release
     artifacts:
