@@ -1,5 +1,26 @@
 language: rust
-rust:
-  - stable
-  - beta
-  - nightly
+branches:
+  only:
+  - master
+matrix:
+  include:
+  - os: osx
+    rust: nightly
+    env:
+      - TARGET=x86_64-apple-darwin
+      - PACKAGE=$TARGET.tar.gz
+install:
+  - rustup target add $TARGET || true
+script:
+  - cargo build --target $TARGET --verbose --release
+before_deploy:
+  - tar -czf $PACKAGE -C target/$TARGET/release jannikkeye/git-auto-sync
+deploy:
+  draft: true
+  provider: releases
+  api_key:
+    secure: epto4YAWMdA0v9nx5RyqD9iPYDZK8OK5dStlcgM6EWnBDhca31ruC1luu5Pj/KfZK25IGcV8yeum6QnVI/pB9Z5TDNVlH42F0Zcwb1rPqS+SySVBMzZrtoXfLqnDoBBxV3TVLQi3FAorVDiJbKkXSIKTYxKuNA4/ALNrGRoFLOq7ubLahnk3dmp/+hXYiYcLrV4OWjUULlxlsRXqi8MHvObjKODrxl7UEjxShneMvtL/JkUGfF1DrIVWVpi8pbY9Vx++5p1xxDnn2bw0e6iSr6hM/Y3bmFRzqsboer+LI9NWbfpIr+PFa6KxbR903Q6nNS8VPy8URoYCjcWvXjK2v0AbYD0w2YZXd5d9eC4pCUd7Dad2FL6OoXxc7/P2BsC7gZxIIeEJ1zo3rpMB0JJDRtspWlP5nwVVI51LSCQMd9A6NIRjxknEXmJ3MyqctQEuv9dr7Jaa/ClkvjkMFn2Dpf3WmbQATmPo8KhomikiniqIUPvOlg8aVuV1OlQ4HIjatdEMbztjEQ/xPGhbF+PaQth3+1kEN4ipaKtTf2B69e+srR90Neu+3VHfbiX/9/UbakHA0oRy65bIIObbxfwb0ODH0FgbYE9uTGUsdZJf28JIu+kiPMK2bYOLsQciZSp23kn+pSUci7PJQc5J8sUa/0RCY9cuAY54S3U8G+DR2tk=
+  file: $PACKAGE
+  skip_cleanup: true
+  on:
+    repo: jannikkeye/git-auto-sync
