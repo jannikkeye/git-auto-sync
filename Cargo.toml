@@ -12,7 +12,7 @@ watchexec = "1.10.0"
 clap = "2.31.2"
 
 [[bin]]
-name = "gas"
+name = "git-auto-sync"
 path = "src/main.rs"
 
 [lib]
