@@ -22,7 +22,7 @@ class GitAutoSync < Formula
         <key>ProgramArguments</key>
         <array>
           <string>#{opt_bin}/git-auto-sync</string>
-          <string>run</string>
+          <string>~/.notable</string>
         </array>
         <key>KeepAlive</key>
         <true/>
