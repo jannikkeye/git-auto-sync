@@ -8,28 +8,24 @@ class GitAutoSync < Formula
     bin.install "git-auto-sync"
   end
 
-  def plist; <<~EOS
+  plist_options :manual => "git-auto-sync ~/.notable"
+
+  def plist; <<-EOS.undent
     <?xml version="1.0" encoding="UTF-8"?>
     <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
     <plist version="1.0">
-    <dict>
+      <dict>
+        <key>Disabled</key>
+        <false/>
         <key>Label</key>
         <string>#{plist_name}</string>
-        <key>KeepAlive</key>
-        <dict>
-          <key>SuccessfulExit</key>
-          <false/>
-        </dict>
-        <key>Program</key>
+        <key>ProgramArguments</key>
         <array>
-          <string>/usr/local/bin/git-auto-sync</string>
+          <string>#{opt_bin}/git-auto-sync</string>
+          <string>run</string>
         </array>
-        <key>RunAtLoad</key>
+        <key>KeepAlive</key>
         <true/>
-        <key>StandardErrorPath</key>
-        <string>/usr/local/var/log/git-auto-sync.log</string>
-        <key>StandardOutPath</key>
-        <string>/usr/local/var/log/git-auto-sync.log</string>
       </dict>
     </plist>
     EOS
